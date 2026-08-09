@@ -3,121 +3,123 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Janitor AI Lorebook Editor</title>
+  <title>Janitor AI Lorebook Editor (Advanced)</title>
   <style>
     * { box-sizing: border-box; }
     body { 
       font-family: system-ui, -apple-system, sans-serif; 
-      background-color: #1a1b26; /* Tema gelap ala terminal editor */
+      background-color: #1a1b26; 
       color: #a9b1d6; 
-      max-width: 650px; 
+      max-width: 750px; 
       margin: 0 auto; 
       padding: 20px; 
-      line-height: 1.6;
+      line-height: 1.5;
     }
-    h2, h3 { color: #7aa2f7; }
+    h2, h3 { color: #7aa2f7; border-bottom: 1px solid #414868; padding-bottom: 10px; }
     
-    .card { 
-      background: #24283b; 
-      padding: 20px; 
-      border-radius: 8px; 
-      border: 1px solid #414868;
-      margin-bottom: 25px; 
-    }
-    .input-group { 
-      margin-bottom: 15px; 
-      display: flex; 
-      flex-direction: column; 
-    }
-    label { 
-      font-weight: 600; 
-      margin-bottom: 5px; 
-      font-size: 14px;
-      color: #9ece6a;
-    }
-    input, textarea { 
-      padding: 10px; 
-      background: #1f2335;
-      border: 1px solid #565f89; 
-      color: #c0caf5;
-      border-radius: 4px; 
-      font-family: monospace; 
-      font-size: 14px;
-    }
-    input:focus, textarea:focus {
-      outline: none;
-      border-color: #7aa2f7;
-    }
+    .card { background: #24283b; padding: 20px; border-radius: 8px; border: 1px solid #414868; margin-bottom: 25px; }
+    .section-title { font-size: 16px; color: #bb9af7; margin-bottom: 15px; margin-top: 10px; font-weight: bold; }
     
-    button { 
-      padding: 10px 15px; 
-      cursor: pointer; 
-      border: none; 
-      border-radius: 4px; 
-      font-weight: bold; 
-      transition: opacity 0.2s;
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+    
+    .input-group { margin-bottom: 15px; display: flex; flex-direction: column; }
+    .checkbox-group { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; color: #9ece6a;}
+    
+    label { font-weight: 600; margin-bottom: 5px; font-size: 13px; color: #9ece6a; }
+    input[type="text"], input[type="number"], textarea, select { 
+      padding: 10px; background: #1f2335; border: 1px solid #565f89; color: #c0caf5; border-radius: 4px; font-family: monospace; font-size: 13px;
     }
+    input:focus, textarea:focus, select:focus { outline: none; border-color: #7aa2f7; }
+    
+    button { padding: 12px; cursor: pointer; border: none; border-radius: 4px; font-weight: bold; transition: opacity 0.2s; font-size: 14px; }
     button:hover { opacity: 0.8; }
     
-    .btn-add { background: #7aa2f7; color: #1a1b26; width: 100%; }
-    .btn-export { 
-      background: #9ece6a; 
-      color: #1a1b26; 
-      width: 100%; 
-      font-size: 16px; 
-      margin-top: 10px; 
-      padding: 15px;
-    }
-    .btn-delete { background: #f7768e; color: #1a1b26; padding: 6px 12px; margin-top: 10px; font-size: 12px; }
+    .btn-add { background: #7aa2f7; color: #1a1b26; width: 100%; margin-top: 10px; }
+    .btn-export { background: #9ece6a; color: #1a1b26; width: 100%; font-size: 16px; margin-top: 10px; }
+    .btn-delete { background: #f7768e; color: #1a1b26; padding: 6px 12px; font-size: 12px; margin-top: 10px; }
     
     ul { list-style: none; padding: 0; }
-    li { 
-      background: #24283b; 
-      padding: 15px; 
-      margin-bottom: 15px; 
-      border-left: 5px solid #bb9af7; 
-      border-radius: 4px; 
-      border: 1px solid #414868;
-    }
-    .entry-data { margin-bottom: 8px; }
-    .highlight { color: #e0af68; }
+    li { background: #24283b; padding: 15px; margin-bottom: 15px; border-left: 5px solid #bb9af7; border-radius: 4px; border: 1px solid #414868; }
+    .entry-data { margin-bottom: 5px; font-size: 13px; }
+    .highlight { color: #e0af68; font-weight: bold; }
+    .badge { background: #414868; padding: 2px 6px; border-radius: 4px; font-size: 11px; margin-right: 5px; }
   </style>
 </head>
 <body>
 
-  <h2>Editor Lorebook (Format Janitor AI)</h2>
+  <h2>Editor Lorebook (Mode Lanjutan)</h2>
 
   <div class="card">
-    <div class="input-group">
-      <label for="name">Nama Entri (Opsional):</label>
-      <input type="text" id="name" placeholder="misal: Konsep Sihir">
+    <div class="section-title">Informasi Dasar</div>
+    <div class="grid-2">
+      <div class="input-group">
+        <label for="name">Entry Name (Opsional):</label>
+        <input type="text" id="name" placeholder="misal: Status Efek">
+      </div>
+      <div class="input-group">
+        <label for="comment">Comment (Catatan Pribadi):</label>
+        <input type="text" id="comment" placeholder="Catatan tidak dibaca AI">
+      </div>
+    </div>
+
+    <div class="section-title">Pemicu & Konten</div>
+    <div class="grid-2">
+      <div class="checkbox-group">
+        <input type="checkbox" id="constant">
+        <label for="constant">Constant (Selalu aktif)</label>
+      </div>
+      <div class="checkbox-group">
+        <input type="checkbox" id="matchWholeWords" checked>
+        <label for="matchWholeWords">Match Whole Words</label>
+      </div>
     </div>
 
     <div class="input-group">
-      <label for="keywords">Kata Kunci (pisahkan dengan koma):</label>
+      <label for="keywords">Keys (Pisahkan dengan koma):</label>
       <input type="text" id="keywords" placeholder="misal: Pain, Sakit, Luka">
     </div>
-
+    
     <div class="input-group">
-      <label for="content">Isi Teks Narasi:</label>
-      <textarea id="content" rows="4" placeholder="Masukkan deskripsi di sini..."></textarea>
+      <label for="secondaryKeys">Secondary Keys (AND ANY - Koma):</label>
+      <input type="text" id="secondaryKeys" placeholder="Kata kunci sekunder...">
     </div>
 
-    <button class="btn-add" onclick="addEntry()">Tambah Entri</button>
+    <div class="input-group">
+      <label for="content">Content (Teks Narasi):</label>
+      <textarea id="content" rows="4" placeholder="Masukkan instruksi konteks..."></textarea>
+    </div>
+
+    <div class="section-title">Kondisi Eksekusi Lanjutan</div>
+    <div class="grid-2">
+      <div class="input-group">
+        <label for="minMessages">Min Messages:</label>
+        <input type="number" id="minMessages" value="0" min="0">
+      </div>
+      <div class="input-group">
+        <label for="probability">Probability (%):</label>
+        <input type="number" id="probability" value="100" min="0" max="100">
+      </div>
+      <div class="input-group">
+        <label for="groupLabel">Group Label(s):</label>
+        <input type="text" id="groupLabel" placeholder="misal: combat_rules">
+      </div>
+      <div class="input-group">
+        <label for="groupWeight">Group Weight:</label>
+        <input type="number" id="groupWeight" value="100" min="0">
+      </div>
+    </div>
+
+    <button class="btn-add" onclick="addEntry()">Tambah Entri Lorebook</button>
   </div>
 
   <h3>Daftar Entri (<span id="entryCount">0</span>)</h3>
-  <div id="emptyMessage">Belum ada entri yang ditambahkan.</div>
   <ul id="entryList"></ul>
 
-  <button class="btn-export" onclick="exportAndCopy()">
-    📋 Salin Format Lorebook ke Clipboard
-  </button>
+  <button class="btn-export" onclick="exportAndCopy()">📋 Salin JSON Format Janitor AI</button>
 
   <script>
     let entries = [];
 
-    // Fungsi untuk membuat UUID v4 agar ID setiap entri unik dan valid
     function generateUUID() {
       return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
         var r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
@@ -126,57 +128,68 @@
     }
 
     function addEntry() {
-      const nameInput = document.getElementById('name').value.trim();
-      const keywordsInput = document.getElementById('keywords').value.trim();
-      const contentInput = document.getElementById('content').value.trim();
+      const name = document.getElementById('name').value.trim();
+      const comment = document.getElementById('comment').value.trim();
+      const isConstant = document.getElementById('constant').checked;
+      const isMatchWhole = document.getElementById('matchWholeWords').checked;
+      const keysInput = document.getElementById('keywords').value.trim();
+      const secKeysInput = document.getElementById('secondaryKeys').value.trim();
+      const content = document.getElementById('content').value.trim();
+      
+      const minMsgs = parseInt(document.getElementById('minMessages').value) || 0;
+      const prob = parseInt(document.getElementById('probability').value) || 100;
+      const groupLabel = document.getElementById('groupLabel').value.trim();
+      const groupWeight = parseInt(document.getElementById('groupWeight').value) || 100;
 
-      if (!keywordsInput || !contentInput) {
-        alert("Kata kunci dan isi teks tidak boleh kosong!");
+      if (!keysInput && !isConstant) {
+        alert("Keys wajib diisi jika Constant tidak diaktifkan!");
+        return;
+      }
+      if (!content) {
+        alert("Content teks narasi tidak boleh kosong!");
         return;
       }
 
-      // Format kata kunci menjadi array
-      const keywordArray = keywordsInput.split(',').map(k => k.trim()).filter(k => k.length > 0);
-      
-      // Menggunakan input asli untuk properti string mentah
-      const rawKeywords = keywordArray.join(', ');
+      const keyArray = keysInput ? keysInput.split(',').map(k => k.trim()).filter(k => k) : [];
+      const secKeyArray = secKeysInput ? secKeysInput.split(',').map(k => k.trim()).filter(k => k) : [];
 
-      // Menyusun objek dengan schema persis seperti Janitor AI
       const newEntry = {
         "activationMode": "standard",
         "activationScript": "",
         "case_sensitive": false,
         "category": "general",
-        "comment": "",
-        "constant": false,
-        "content": contentInput,
+        "comment": comment,
+        "constant": isConstant,
+        "content": content,
         "enabled": true,
         "extensions": {},
-        "groupWeight": 100,
-        "id": generateUUID(), // Menghasilkan ID unik
-        "inclusionGroupRaw": "",
+        "groupWeight": groupWeight,
+        "id": generateUUID(),
+        "inclusionGroupRaw": groupLabel,
         "insertion_order": 100,
-        "key": keywordArray,
+        "key": keyArray,
         "keyMatchPriority": false,
-        "keysecondary": [],
-        "keysecondaryRaw": "",
-        "keysRaw": rawKeywords,
-        "matchWholeWords": true,
-        "minMessages": 0,
-        "name": nameInput,
+        "keysecondary": secKeyArray,
+        "keysecondaryRaw": secKeyArray.join(', '),
+        "keysRaw": keyArray.join(', '),
+        "matchWholeWords": isMatchWhole,
+        "minMessages": minMsgs,
+        "name": name,
         "prioritizeInclusion": false,
         "priority": 1,
-        "probability": 100,
-        "selectiveLogic": 0,
-        "tags": ["character", "lore", "faction", "magic", "backstory", "world"],
-        "keywordsRaw": rawKeywords
+        "probability": prob,
+        "selectiveLogic": 0, // 0 = AND ANY
+        "tags": ["character", "lore", "world"],
+        "keywordsRaw": keyArray.join(', ')
       };
 
       entries.push(newEntry);
       
-      // Kosongkan form
+      // Reset Form Teks (biarkan checkbox/angka tetap)
       document.getElementById('name').value = "";
+      document.getElementById('comment').value = "";
       document.getElementById('keywords').value = "";
+      document.getElementById('secondaryKeys').value = "";
       document.getElementById('content').value = "";
 
       renderEntries();
@@ -189,46 +202,32 @@
 
     function renderEntries() {
       const entryList = document.getElementById('entryList');
-      const emptyMessage = document.getElementById('emptyMessage');
-      const entryCount = document.getElementById('entryCount');
-
-      entryCount.innerText = entries.length;
-      emptyMessage.style.display = entries.length === 0 ? "block" : "none";
-      
+      document.getElementById('entryCount').innerText = entries.length;
       entryList.innerHTML = "";
+      
       entries.forEach((entry, index) => {
         const li = document.createElement('li');
-        const displayName = entry.name ? `<strong>${entry.name}</strong><br>` : '';
         li.innerHTML = `
           <div class="entry-data">
-            ${displayName}
-            <span class="highlight">Keywords:</span> ${entry.key.join(', ')}
+            ${entry.name ? `<span class="badge">Nama: ${entry.name}</span>` : ''}
+            ${entry.constant ? '<span class="badge" style="background:#e0af68; color:#1a1b26;">Constant</span>' : ''}
+            <span class="badge">Prob: ${entry.probability}%</span>
           </div>
-          <div class="entry-data">
-            <span class="highlight">Content:</span> ${entry.content}
-          </div>
-          <button class="btn-delete" onclick="removeEntry(${index})">Hapus Entri</button>
+          <div class="entry-data"><span class="highlight">Keys:</span> ${entry.key.join(', ') || 'N/A'}</div>
+          <div class="entry-data"><span class="highlight">Content:</span> ${entry.content}</div>
+          <button class="btn-delete" onclick="removeEntry(${index})">Hapus</button>
         `;
         entryList.appendChild(li);
       });
     }
 
     function exportAndCopy() {
-      if (entries.length === 0) {
-        alert("Belum ada entri untuk diekspor.");
-        return;
-      }
-
+      if (entries.length === 0) { alert("Data kosong."); return; }
       const jsonString = JSON.stringify(entries, null, 2);
-      
       navigator.clipboard.writeText(jsonString)
-        .then(() => alert("Berhasil! JSON sudah disalin dengan format bawaan Janitor AI."))
-        .catch(err => {
-          console.error("Error: ", err);
-          alert("Gagal menyalin teks.");
-        });
+        .then(() => alert("✅ JSON disalin! Siap di-import ke Janitor AI."))
+        .catch(err => alert("Gagal menyalin."));
     }
   </script>
-
 </body>
 </html>
