@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lorebook Editor Offline</title>
+  <style>
+    /* Reset gaya dasar dan tipografi bersih */
+    * { box-sizing: border-box; }
+    body { 
+      font-family: system-ui, -apple-system, sans-serif; 
+      background-color: #f4f4f9; 
+      color: #333; 
+      max-width: 600px; 
+      margin: 0 auto; 
+      padding: 20px; 
+      line-height: 1.6;
+    }
+    h2, h3 { color: #222; }
+    
+    /* Desain Kartu dan Formulir */
+    .card { 
+      background: #fff; 
+      padding: 20px; 
+      border-radius: 8px; 
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1); 
+      margin-bottom: 25px; 
+    }
+    .input-group { 
+      margin-bottom: 15px; 
+      display: flex; 
+      flex-direction: column; 
+    }
+    label { 
+      font-weight: 600; 
+      margin-bottom: 5px; 
+      font-size: 14px;
+    }
+    input, textarea { 
+      padding: 10px; 
+      border: 1px solid #ccc; 
+      border-radius: 4px; 
+      font-family: inherit; 
+      font-size: 14px;
+    }
+    
+    /* Tombol Interaktif */
+    button { 
+      padding: 10px 15px; 
+      cursor: pointer; 
+      border: none; 
+      border-radius: 4px; 
+      font-weight: bold; 
+      transition: background 0.2s;
+    }
+    .btn-add { background: #007bff; color: white; width: 100%; }
+    .btn-add:hover { background: #0056b3; }
+    
+    .btn-export { 
+      background: #28a745; 
+      color: white; 
+      width: 100%; 
+      font-size: 16px; 
+      margin-top: 10px; 
+      padding: 15px;
+    }
+    .btn-export:hover { background: #218838; }
+    
+    .btn-delete { background: #dc3545; color: white; padding: 6px 12px; margin-top: 10px; font-size: 12px; }
+    .btn-delete:hover { background: #c82333; }
+    
+    /* Daftar Entri */
+    ul { list-style: none; padding: 0; }
+    li { 
+      background: #fff; 
+      padding: 15px; 
+      margin-bottom: 15px; 
+      border-left: 5px solid #007bff; 
+      border-radius: 4px; 
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1); 
+    }
+    .entry-data { margin-bottom: 8px; }
+  </style>
+</head>
+<body>
+
+  <h2>Editor Lorebook Ringan</h2>
+
+  <div class="card">
+    <div class="input-group">
+      <label for="keywords">Kata Kunci (pisahkan dengan koma):</label>
+      <input type="text" id="keywords" placeholder="misal: kopi, kafe, barista">
+    </div>
+
+    <div class="input-group">
+      <label for="content">Isi Teks Narasi:</label>
+      <textarea id="content" rows="4" placeholder="Masukkan deskripsi yang akan disuntikkan ke karakter..."></textarea>
+    </div>
+
+    <button class="btn-add" onclick="addEntry()">Tambah Entri</button>
+  </div>
+
+  <h3>Daftar Entri (<span id="entryCount">0</span>)</h3>
+  <div id="emptyMessage">Belum ada entri lorebook.</div>
+  <ul id="entryList"></ul>
+
+  <button class="btn-export" onclick="exportAndCopy()">
+    📋 Ekspor & Salin ke Clipboard (JSON)
+  </button>
+
+  <script>
+    // Menyimpan data secara lokal di memori saat file dibuka
+    let entries = [];
+
+    function addEntry() {
+      const keywordsInput = document.getElementById('keywords').value;
+      const contentInput = document.getElementById('content').value;
+
+      if (!keywordsInput.trim() || !contentInput.trim()) {
+        alert("Kata kunci dan isi teks tidak boleh kosong!");
+        return;
+      }
+
+      // Membersihkan dan mengubah string kata kunci menjadi array
+      const keywordArray = keywordsInput
+        .split(',')
+        .map(k => k.trim())
+        .filter(k => k.length > 0);
+
+      // Membuat objek data sesuai struktur Lorebook
+      const newEntry = {
+        keys: keywordArray,
+        content: contentInput
+      };
+
+      entries.push(newEntry);
+      
+      // Kosongkan form input
+      document.getElementById('keywords').value = "";
+      document.getElementById('content').value = "";
+
+      renderEntries();
+    }
+
+    function removeEntry(index) {
+      entries.splice(index, 1);
+      renderEntries();
+    }
+
+    function renderEntries() {
+      const entryList = document.getElementById('entryList');
+      const emptyMessage = document.getElementById('emptyMessage');
+      const entryCount = document.getElementById('entryCount');
+
+      // Update jumlah entri
+      entryCount.innerText = entries.length;
+      
+      // Mengatur tampilan pesan kosong
+      emptyMessage.style.display = entries.length === 0 ? "block" : "none";
+      
+      // Render ulang daftar HTML
+      entryList.innerHTML = "";
+      entries.forEach((entry, index) => {
+        const li = document.createElement('li');
+        li.innerHTML = `
+          <div class="entry-data"><strong>Trigger:</strong> ${entry.keys.join(', ')}</div>
+          <div class="entry-data"><strong>Teks:</strong> ${entry.content}</div>
+          <button class="btn-delete" onclick="removeEntry(${index})">Hapus</button>
+        `;
+        entryList.appendChild(li);
+      });
+    }
+
+    function exportAndCopy() {
+      if (entries.length === 0) {
+        alert("Belum ada entri untuk diekspor.");
+        return;
+      }
+
+      // Mengonversi array ke format JSON dengan indentasi 2 spasi agar rapi
+      const jsonString = JSON.stringify(entries, null, 2);
+      
+      // Menyalin ke clipboard perangkat
+      navigator.clipboard.writeText(jsonString)
+        .then(() => alert("✅ JSON berhasil disalin! Buka pengaturan karakter di Janitor AI dan paste data ini."))
+        .catch(err => {
+          console.error("Gagal menyalin teks: ", err);
+          alert("Gagal menyalin. Cek izin browser untuk akses clipboard.");
+        });
+    }
+  </script>
+
+</body>
+</html>
